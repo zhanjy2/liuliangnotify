@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+
+	<!-- PropertyPlaceholderConfigurer将用Properties文件中的值替换掉这个dataSource的属性值 -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+			<!-- 定义一个PropertyPlaceholderConfigurer的实例，并将其位置属性设置为我们的属性文件，来代替占位符${xxx} -->
+				<value>WEB-INF/database.properties</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="maxActive" value="${jdbc.maxActive}" />
+    	<property name="maxIdle" value="${jdbc.maxIdle}" />
+    	<property name="maxWait" value="${jdbc.maxWait}" />
+    	<property name="removeAbandoned" value="${jdbc.removeAbandoned}" />
+    	<property name="removeAbandonedTimeout" value="${jdbc.removeAbandonedTimeout}" />
+   	 	<property name="logAbandoned" value="${jdbc.logAbandoned}" />
+    	<property name="validationQuery" value="${jdbc.validationQuery}" />
+    	<property name="testOnBorrow" value="${jdbc.testOnBorrow}" />
+	</bean>
+
+	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="/WEB-INF/classes/SqlMapConfig.xml" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- 创建sqlMapClientTemplate -->
+	<bean id="sqlMapClientTemplate" class="org.springframework.orm.ibatis.SqlMapClientTemplate">
+		<constructor-arg>
+			<ref bean="sqlMapClient" />
+		</constructor-arg>
+	</bean>
+	<bean id="orderDao" class="com.unisk.notify.dao.impl.OrderDaoImpl">
+		<property name="sqlMap" ref="sqlMapClient"></property>
+	</bean>		
+</beans>

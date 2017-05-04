@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+   
+    <!--Spring3.1之前的注解 HandlerMapping -->
+<!--     <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/> -->
+    
+    <!--Spring3.1之前的注解 HandlerAdapter -->
+<!--     <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"> -->
+        <!--线程安全的访问session-->
+<!--         <property name="synchronizeOnSession" value="true"/> -->
+<!--     </bean>  -->
+    
+ 
+    <!--Spring3.1开始的注解 HandlerMapping -->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/> 
+    
+    <!--Spring3.1开始的注解 HandlerAdapter -->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <!--线程安全的访问session-->
+        <property name="synchronizeOnSession" value="true"/>
+    </bean> 
+     
+    
+    
+    <!-- ViewResolver -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    
+    <!-- 处理器 -->
+    <bean class="com.unisk.notify.web.controller.paramtype.PathVariableTypeController">
+   	 <property name="orderDao" ref="orderDao"></property>
+    </bean>
+</beans>
